@@ -25,6 +25,7 @@ public class DetailsActivity extends AppCompatActivity {
     TextView tLang;
     TextView tCurrency;
 
+    // dit hele ding word bij aangemaakt te worden opgeroepen en filtered alle rauwe data om naar leesbaar materiaal.
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.country_detail);
@@ -101,13 +102,14 @@ public class DetailsActivity extends AppCompatActivity {
         Button button;
         button = findViewById(R.id.buttonReturn);
 
+        //Button om deze pagina te closen en dus terug te gaan naar de vorige
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
+        //onclick voor door te sturen naar de googlemaps van het land
         tGoogleMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

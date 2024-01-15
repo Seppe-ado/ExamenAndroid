@@ -71,7 +71,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         TextView textView= holder.textView;
         textView.setText(name);
 
-        //CountriesViewHolder.textView.setText(name);
+
 
     }
 

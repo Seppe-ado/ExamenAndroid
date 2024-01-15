@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
             return instance;
     }
 
+
+    //dit word gerunt wanneer de pagina aangemaakt wordt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        // zware dingen mogen niet op de main thread gedaan worden dus word dit op een andere thread gedaan, dit is voor de data op te halen online en te saven in de
+        //locale database
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray countriesJson= new JSONArray(responseString);
                     int length= countriesJson.length();
                     ArrayList<CountriesInfo> finalInfo= new ArrayList<>(length);
+                    //loopt door elk element dat word mee gegeven en saved het dan in de ROOM database in de volgende for loop
                     for (int i=0; i <length;i++){
                         JSONObject value= countriesJson.getJSONObject(i);
                         String fullname= value.getString("name");
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                        dataForList2.add(temp);
 
                     }
-
+                    // threads mogen niet de UI aanpassen dus met dit kan je dat wel, hier word de recyclerview gepopuleerd
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -119,22 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
-                    //CountriesAdapter adapter= new CountriesAdapter(dataForList);
-                    //recyclerView.setAdapter(adapter);
-
-
-
-
-                    CountriesInfo temp=null ;
-                    temp = viewModel.getCountry(finalInfo.get(16).getName());
-                    String test = (finalInfo.get(6)).toString();
-
-                    //setText(test);
-
-
-
-
-
 
 
 
@@ -164,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        // dit is voor de search bar functie te geven, wat het doet is gewoon de landen vinden die de naam hebben en dan opniuew de recyclerview populeren
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -174,12 +162,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 ArrayList<CountriesInfo> filter= new ArrayList<>();
+
+
                 for (int i=0;i<dataForList2.size();i++){
                     if( dataForList2.get(i).getName().toLowerCase().contains(newText.toLowerCase())){
                         filter.add(dataForList2.get(i));
                     }
 
                 }
+
                 recyclerViewUpdate(filter);
                 return false;
             }
@@ -198,12 +189,13 @@ public class MainActivity extends AppCompatActivity {
         TextView textView= findViewById(R.id.textViewtest);
         textView.setText(name);
     }*/
+    // dit is de functie die word opgeroepen om de adapter aan te maken en de recyclerview te populeren
     public void recyclerViewUpdate(ArrayList<CountriesInfo> dataForList){
         RecyclerView recyclerView=findViewById(R.id.recyclerview);
         CountriesAdapter adapter= new CountriesAdapter(dataForList);
         recyclerView.setAdapter(adapter);
     }
-
+    //deze functie is om de naam te lezen van de item waar op geclickt is en dan door te gaan naar de detailspagine
     public void goDetails(String name){
 
         Intent intent = new Intent(MainActivity.this,DetailsActivity.class);
